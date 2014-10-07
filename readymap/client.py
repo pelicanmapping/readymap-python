@@ -20,6 +20,12 @@ class ReadyMap(object):
     def abs_path(self, path):
         return "%s%s" % (self.url, path)
 
+    def get_layers(self):
+        """
+        Gets all layers from the server
+        """
+        return ReadymapObject.all(self, Layer)
+
     def get_layer(self, id):
         """
         Gets a layer from the server
