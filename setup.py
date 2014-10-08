@@ -13,6 +13,7 @@ setup(
     name='readymap-python',
     version=version,
     author='Jason Beverage',
+    url="https://github.com/pelicanmapping/readymap-python",
     author_email="jasonbeverage@pelicanmapping.com",
     description=('Python bindings for ReadyMap'),
     long_description=README,
