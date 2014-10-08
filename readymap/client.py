@@ -2,6 +2,7 @@ import requests
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
 from resource import ReadymapObject, Layer
+from readymap import error
 
 class ReadyMap(object):
     """
@@ -16,6 +17,9 @@ class ReadyMap(object):
             "username" : self.username,
             "password": self.password
         })
+        # Make sure we are given a session id.
+        if "sessionid" not in self._session.cookies:
+            raise error.AuthenticationError
 
     def abs_path(self, path):
         return "%s%s" % (self.url, path)
@@ -69,6 +73,25 @@ class ReadyMap(object):
         callback = self._create_callback(encoder)
         monitor = MultipartEncoderMonitor(encoder, callback)
         self._session.post(self.abs_path("/filemanager/upload_data/"), data=monitor, headers={"Content-Type": monitor.content_type})
+
+    def upload_layer(self, name, description, files):
+        """
+        Uploads files and creates a new layer
+        """
+        # We use the MultipartEncoder to handle streaming large files as well as progress
+        data = {}
+        index = 0
+        for f in files:
+            data["file%s" % index] = (f, open(f, 'rb'))
+            index+=1
+        data["name"] = name
+        data["description"] = description
+
+        encoder = MultipartEncoder(data)
+        callback = self._create_callback(encoder)
+        monitor = MultipartEncoderMonitor(encoder, callback)
+        self._session.post(self.abs_path("/layers/upload"), data=monitor, headers={"Content-Type": monitor.content_type})
+
 
 
 
