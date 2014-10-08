@@ -9,5 +9,5 @@ For more information about ReadyMap:  http://www.readymap.org
 
 To install the latest from Github you can run
 
-     sudo pip install git+https://github.com/pelicanmapping/readymap-python.git --upgrade readymap-python
+     sudo pip install git+https://github.com/pelicanmapping/readymap-python.git
      
