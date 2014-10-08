@@ -1,7 +1,7 @@
 ReadyMap Python bindings
 =========================
 
-This is a Python interface for interacting with the API of Pelican Mappings ReadyMap server.
+This is a Python interface for interacting with the API of Pelican Mapping's ReadyMap server.
 
 For more information about ReadyMap:  http://www.readymap.org
 
