@@ -52,6 +52,12 @@ new_layer = rm.create_layer({
    "time": "2014-08-21T17:09:00Z",
    "layer_type": "local"
    })
+   
+# Upload a file to the server
+rm.upload(directory="/myuploads", filename="/path/to/image.tif")
+
+# Upload a file to the server and create a layer
+rm.upload_layer(name="My Uploaded Layer", description="A new layer", files=["/path/to/image.tif",])
 ```
       
 
