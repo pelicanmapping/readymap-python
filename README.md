@@ -34,6 +34,9 @@ l = rm.get_layer(id=10)
 l.name = "My new name"
 l.save()
 
+# Publish a layer
+l.publish()
+
 # Delete a layer
 l.delete()
 
