@@ -1,4 +1,5 @@
 import json
+import requests
 
 class ReadymapObject(object):
     """
@@ -13,8 +14,10 @@ class ReadymapObject(object):
     @classmethod
     def new(cls, client, type, data):
         payload = json.dumps(data)
-        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-        resp = client._session.post(client.abs_path(type.class_url()) + "/", data=payload, headers=headers)
+        headers = client.headers
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'text/plain'
+        resp = requests.post(client.abs_path(type.class_url()) + "/", data=payload, headers=headers)
         # Create a new object of the given type
         new = type()
         new._client = client
@@ -23,7 +26,7 @@ class ReadymapObject(object):
 
     @classmethod
     def all(cls, client, type):
-        r = client._session.get(client.abs_path(type.class_url()))
+        r = requests.get(client.abs_path(type.class_url()), headers=self._client.headers)
         j = r.json()
         results = []
         for item in j:
@@ -34,21 +37,23 @@ class ReadymapObject(object):
         return results
 
     def fetch(self, client):
-        r = client._session.get(client.abs_path(self.instance_url))
+        r = requests.get(client.abs_path(self.instance_url), headers=client.headers)
         j = r.json()
         self.decode(j)
         self._client = client
 
     def save(self):
         payload = json.dumps(self.encode())
-        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-        self._client._session.put(self._client.abs_path(self.instance_url), data=payload, headers=headers)
+        headers = self._client.headers
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'text/plain'
+        requests.put(self._client.abs_path(self.instance_url), data=payload, headers=headers)
 
     def delete(self):
         """
         Deletes a resource
         """
-        self._client._session.delete(self._client.abs_path(self.instance_url))
+        requests.delete(self._client.abs_path(self.instance_url), self._client.headers)
 
     def encode(self):
         data = {}
@@ -87,7 +92,7 @@ class Layer(ReadymapObject):
         """
         if self.TypeString == "Local":
             url = self._client.abs_path(self.instance_url + "/files")
-            r = self._client._session.get(url)
+            r = requests.get(url, self._client.headers)
             return r.json()
         return None
 
@@ -96,7 +101,7 @@ class Layer(ReadymapObject):
         Publishes this layer
         """
         url = self._client.abs_path("/layers/%s/publish" % self.id)
-        self._client._session.post(url)
+        requests.post(url, self._client.headers)
 
     def __str__(self):
         return "Layer: %s" % self.name

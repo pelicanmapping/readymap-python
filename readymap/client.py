@@ -8,21 +8,16 @@ class ReadyMap(object):
     """
     Client object for interacting with a ReadyMap server.
     """
-    def __init__(self, url, username, password):
+    def __init__(self, url, token):
         self.url = url
-        self.username = username
-        self.password = password
-        self._session = requests.session()
-        self._session.post(self.abs_path("/users/login/"), {
-            "username" : self.username,
-            "password": self.password
-        })
-        # Make sure we are given a session id.
-        if "sessionid" not in self._session.cookies:
-            raise error.AuthenticationError
+        self.token = token
 
     def abs_path(self, path):
         return "%s%s" % (self.url, path)
+
+    @property
+    def headers(self):
+        return {"Authorization": "token %s" % self.token}
 
     def get_layers(self):
         """
@@ -72,7 +67,9 @@ class ReadyMap(object):
             })
         callback = self._create_callback(encoder)
         monitor = MultipartEncoderMonitor(encoder, callback)
-        self._session.post(self.abs_path("/filemanager/upload_data/"), data=monitor, headers={"Content-Type": monitor.content_type})
+        headers = self.headers
+        headers["Content-Type"] = monitor.content_type
+        requests.post(self.abs_path("/filemanager/upload_data/"), data=monitor, headers=headers)
 
     def upload_layer(self, name, description, files):
         """
@@ -90,7 +87,9 @@ class ReadyMap(object):
         encoder = MultipartEncoder(data)
         callback = self._create_callback(encoder)
         monitor = MultipartEncoderMonitor(encoder, callback)
-        self._session.post(self.abs_path("/layers/upload"), data=monitor, headers={"Content-Type": monitor.content_type})
+        headers = self.headers
+        headers["Content-Type"] = monitor.content_type
+        requests.post(self.abs_path("/layers/upload"), data=monitor, headers=headers)
 
 
 

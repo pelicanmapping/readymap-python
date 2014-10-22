@@ -5,21 +5,15 @@ from readymap import ReadyMap
 class TestLayer(unittest.TestCase):
     def setUp(self):
         # Login
-        self.rm = ReadyMap("http://localhost:8000", username="readymap", password="readymap")
+        self.rm = ReadyMap("http://localhost:8000", token="your_token")
 
     def create_layer(self, name):
         return self.rm.create_layer({
-        "apply_742_colorization": False,
-        "apply_background_color": False,
-        "background_color": "",
         "data_type": 1,
         "description": "",
-        "enabled": True,
         "format": "png",
         "generate_tiles_on_demand": True,
-        "make_similar_background_colors_transparent": False,
         "max_level": 19,
-        "metatile": False,
         "name": "My Layer",
         "public": True,
         "resample": 0,
@@ -53,7 +47,7 @@ class TestLayer(unittest.TestCase):
         self.assertEqual(layer.name, newLayer.name)
 
         # Now delete the layer
-        layer.delete()
+        #layer.delete()
 
 
 if __name__ == '__main__':
