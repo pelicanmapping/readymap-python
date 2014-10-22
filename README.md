@@ -20,7 +20,7 @@ Here are just some of the amazing things you can do with the ReadyMap API
 from readymap import ReadyMap
 
 # Login to the server
-rm = ReadyMap("http://yourserver.com/readymap", username="username", password="password")
+rm = ReadyMap("http://yourserver.com/readymap", token="yourtoken")
 
 # List all the layers on the server
 layers = rm.get_layers()
