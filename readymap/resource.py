@@ -26,7 +26,7 @@ class ReadymapObject(object):
 
     @classmethod
     def all(cls, client, type):
-        r = requests.get(client.abs_path(type.class_url()), headers=self._client.headers)
+        r = requests.get(client.abs_path(type.class_url()), headers=client.headers)
         j = r.json()
         results = []
         for item in j:
